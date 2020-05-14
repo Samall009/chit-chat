@@ -7,6 +7,7 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
+	. "test/blog/config"
 )
 
 // 全局MySQL驱动指针
@@ -15,7 +16,16 @@ var Db *sql.DB
 // 初始化方法
 func init() {
 	var err error
-	Db, err = sql.Open("mysql", "root:root@/chitchat?charset=utf8mb4&parseTime=true")
+
+	config := LoadConfig()     // 加载全局配置实例
+	driver := config.Db.Driver // 驱动
+
+	// 拼接链接路劲
+	dataSourceName := fmt.Sprintf("%s:%s@(%s)/%s?charset=%s&parseTime=true", config.Db.User, config.Db.Password,
+		config.Db.Address, config.Db.Database, config.Db.Charset)
+
+	Db, err = sql.Open(driver, dataSourceName)
+
 	if err != nil {
 		log.Fatal(err)
 	}
