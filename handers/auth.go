@@ -71,9 +71,8 @@ func Authenticate(writer http.ResponseWriter, request *http.Request) {
 		// 重定向至首页
 		http.Redirect(writer, request, "/", 302)
 	} else {
+		// 重定向至错误页面
 		error_message(writer, request, "密码错误")
-		// 重定向至登录页
-		http.Redirect(writer, request, "/login", 302)
 	}
 }
 
